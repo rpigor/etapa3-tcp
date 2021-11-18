@@ -37,5 +37,15 @@ public class EvaluationOperationServiceImpl implements EvaluationOperationServic
 	public EvaluationGroup getEvaluationGroupByName(String groupName) {
 		return database.getEvaluationGroupByName(groupName);
 	}
+
+	@Override
+	public Product getProductById(int productId) {
+		return database.getProductById(productId);
+	}
+
+	@Override
+	public Evaluator getEvaluatorById(int evaluatorId) {
+		return database.getEvaluatorById(evaluatorId);
+	}
 	
 }

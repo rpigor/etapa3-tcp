@@ -25,7 +25,7 @@ public class EvaluateProductsCommand implements Command {
 		
 		printProducts(products);
 		
-		Product selectedProduct = selectProduct(products);
+		Product selectedProduct = selectProduct();
 		System.out.println("Produto selecionado: " + selectedProduct.getName());
 		
 		List<Evaluator> eligibleEvaluators = selectedProduct.getEvaluationGroup().getMembers();
@@ -50,27 +50,17 @@ public class EvaluateProductsCommand implements Command {
 		}
 	}
 	
-	private Product selectProduct(List<Product> products) {
+	private Product selectProduct() {
 		int productId = -1;
 		
 		Product selectedProduct = null;
 		while (selectedProduct == null) {
 			System.out.print("Entre com o id de um produto: ");
 			productId = UIUtils.INSTANCE.readInteger();
-			selectedProduct = findProductById(products, productId);
+			selectedProduct = evalOperationService.getProductById(productId);
 		}
 		
 		return selectedProduct;
-	}
-	
-	private Product findProductById(List<Product> products, int productId) {
-		for (Product product : products) {
-			if (product.getId() == productId) {
-				return product;
-			}
-		}
-		
-		return null;
 	}
 	
 	private void printEvaluators(List<Evaluator> evaluators) {		
@@ -84,23 +74,13 @@ public class EvaluateProductsCommand implements Command {
 		int evaluatorId = -1;
 		
 		Evaluator selectedEvaluator = null;
-		while (selectedEvaluator == null) {
+		while (selectedEvaluator == null || !evaluators.contains(selectedEvaluator)) {
 			System.out.print("Entre com o id de um avaliador: ");
 			evaluatorId = UIUtils.INSTANCE.readInteger();
-			selectedEvaluator = findEvaluatorById(evaluators, evaluatorId);
+			selectedEvaluator = evalOperationService.getEvaluatorById(evaluatorId);
 		}
 		
 		return selectedEvaluator;
-	}
-	
-	private Evaluator findEvaluatorById(List<Evaluator> evaluators, int evaluatorId) {
-		for (Evaluator evaluator : evaluators) {
-			if (evaluator.getId() == evaluatorId) {
-				return evaluator;
-			}
-		}
-		
-		return null;
 	}
 	
 	private int readRating() {

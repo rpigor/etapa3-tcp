@@ -16,5 +16,9 @@ public interface EvaluationOperationService {
 	public List<EvaluationGroup> getAllEvaluationGroups();
 
 	public EvaluationGroup getEvaluationGroupByName(String groupName);
+
+	public Product getProductById(int productId);
+
+	public Evaluator getEvaluatorById(int evaluatorId);
 	
 }

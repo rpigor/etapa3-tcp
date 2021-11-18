@@ -46,6 +46,15 @@ public class Database {
 		return this.evaluationGroups.get(groupName);
 	}
 	
+	public Product getProductById(int productId) {
+		return this.products.get(productId);
+	}
+
+	public Evaluator getEvaluatorById(int evaluatorId) {
+		return this.evaluators.get(evaluatorId);
+	}
+	
+	
 	private void initData() {
 		// evaluators
 		Evaluator e1 = new Evaluator(1, "João", "RS",
@@ -158,5 +167,5 @@ public class Database {
 	private void save(Product product) {
 		this.products.put(product.getId(), product);
 	}
-	
+
 }
