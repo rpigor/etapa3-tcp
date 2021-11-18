@@ -42,6 +42,10 @@ public class Database {
 		return this.products.values();
 	}
 	
+	public EvaluationGroup getEvaluationGroupByName(String groupName) {
+		return this.evaluationGroups.get(groupName);
+	}
+	
 	private void initData() {
 		// evaluators
 		Evaluator e1 = new Evaluator(1, "João", "RS",
