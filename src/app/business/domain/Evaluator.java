@@ -1,5 +1,6 @@
 package app.business.domain;
 
+import java.util.LinkedList;
 import java.util.List;
 
 public class Evaluator {
@@ -8,6 +9,7 @@ public class Evaluator {
 	private String name;
 	private String state;
 	private List<Category> interestCategories;
+	private List<Evaluation> evaluations;
 	
 	public Evaluator(int id, String name, String state,
 			List<Category> interestCategories) {
@@ -15,6 +17,7 @@ public class Evaluator {
 		this.name = name;
 		this.state = state;
 		this.interestCategories = interestCategories;
+		this.evaluations = new LinkedList<Evaluation>();
 	}
 	
 	public int getId() {
@@ -31,6 +34,35 @@ public class Evaluator {
 	
 	public List<Category> getInterestCategories() {
 		return interestCategories;
+	}
+
+	public List<Evaluation> getEvaluations() {
+		return evaluations;
+	}
+
+	public void allowProduct(Product product) {
+		evaluations.add(new Evaluation(this, product));
+	}
+	
+	public boolean isProductCandidate(Product product) {
+		return !this.equals(product.getRequester())
+				&& this.getInterestCategories().contains(product.getCategory());
+	}
+
+	public int countAllowedProductsByGroup(EvaluationGroup group) {
+		List<Evaluation> evaluations = getEvaluations();
+		
+		if (evaluations.isEmpty())
+			return 0;
+		
+		int n = 0;
+		for (Evaluation evaluation : evaluations) {
+			if (evaluation.getProduct().getEvaluationGroup().equals(group)) {
+				n++;
+			}
+		}
+		
+		return n;
 	}
 
 }
