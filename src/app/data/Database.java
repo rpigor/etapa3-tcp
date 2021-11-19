@@ -154,6 +154,20 @@ public class Database {
 		Product p11 = new Product(11, "Natura SPF20 Rosto Matte", evaluators.get(10),
 				evaluationGroups.get("SPF A"), Category.DD_CREAM);
 		save(p11);
+		
+		// evaluations
+		e8.allowProduct(p1).rate(2);
+		e10.allowProduct(p1);
+		e7.allowProduct(p2).rate(2);
+		e2.allowProduct(p2).rate(3);
+		e4.allowProduct(p3).rate(-1);
+		e6.allowProduct(p3).rate(1);
+		e1.allowProduct(p4).rate(1);
+		e3.allowProduct(p4).rate(0);
+		e4.allowProduct(p5).rate(-3);
+		e5.allowProduct(p5).rate(-3);
+		e3.allowProduct(p6).rate(-1);
+		e6.allowProduct(p6).rate(0);
 	}
 	
 	private void save(Evaluator evaluator) {

@@ -40,8 +40,10 @@ public class Evaluator {
 		return evaluations;
 	}
 
-	public void allowProduct(Product product) {
-		evaluations.add(new Evaluation(this, product));
+	public Evaluation allowProduct(Product product) {
+		Evaluation pendingEvaluation = new Evaluation(this, product);
+		evaluations.add(pendingEvaluation);
+		return pendingEvaluation;
 	}
 	
 	public boolean isProductCandidate(Product product) {
