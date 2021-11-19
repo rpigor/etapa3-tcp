@@ -65,4 +65,14 @@ public class Evaluator {
 		return n;
 	}
 
+	public Evaluation getPendingEvaluationForProduct(Product product) {
+		for (Evaluation evaluation : getEvaluations()) {
+			if (evaluation.getProduct().equals(product) && evaluation.isPending()) {
+				return evaluation;
+			}
+		}
+		
+		return null;
+	}
+
 }

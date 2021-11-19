@@ -1,5 +1,6 @@
 package app.ui.command;
 
+import java.util.LinkedList;
 import java.util.List;
 
 import app.business.EvaluationOperationService;
@@ -23,15 +24,26 @@ public class EvaluateProductsCommand implements Command {
 	public void execute() {
 		List<Product> products = evalOperationService.getAllProducts();
 		
+		if (products.isEmpty()) {
+			System.out.println("Não há produtos para avaliar.");
+			return;
+		}
+		
 		printProducts(products);
 		
 		Product selectedProduct = selectProduct();
 		System.out.println("Produto selecionado: " + selectedProduct.getName());
 		
-		List<Evaluator> eligibleEvaluators = selectedProduct.getEvaluationGroup().getMembers();
-		printEvaluators(eligibleEvaluators);
+		List<Evaluator> allowedEvaluators = getAllowedEvaluatorsForProduct(selectedProduct);
 		
-		Evaluator selectedEvaluator = selectEvaluator(eligibleEvaluators);
+		if (allowedEvaluators.isEmpty()) {
+			System.out.println("Não há avaliadores alocados para este produto.");
+			return;
+		}
+		
+		printEvaluators(allowedEvaluators);
+		
+		Evaluator selectedEvaluator = selectEvaluator(allowedEvaluators);
 		System.out.println("Avaliador selecionado: " + selectedEvaluator.getName());
 		
 		int rating = readRating();
@@ -39,8 +51,8 @@ public class EvaluateProductsCommand implements Command {
 		
 		System.out.println("Operação efetuada com sucesso.");
 		System.out.println("Avaliação: nota " + evaluation.getRating()
-				+ " para o produto " + selectedProduct.getName()
-				+ " pelo avaliador " + selectedEvaluator.getName() + ".");	
+				+ " para o produto " + selectedProduct.getName() + " (id " + selectedProduct.getId() + ")"
+				+ " pelo avaliador " + selectedEvaluator.getName() + " (id " + selectedEvaluator.getId() + ").");	
 	}
 	
 	private void printProducts(List<Product> products) {
@@ -81,6 +93,20 @@ public class EvaluateProductsCommand implements Command {
 		}
 		
 		return selectedEvaluator;
+	}
+	
+	private List<Evaluator> getAllowedEvaluatorsForProduct(Product product) {
+		List<Evaluator> allowedEvaluators = new LinkedList<Evaluator>();
+		for (Evaluator evaluator : product.getEvaluationGroup().getMembers()) {
+			for (Evaluation evaluation : evaluator.getEvaluations()) {
+				if (evaluation.getProduct().equals(product) && evaluation.isPending()) {
+					allowedEvaluators.add(evaluator);
+					break;
+				}
+			}
+		}
+		
+		return allowedEvaluators;
 	}
 	
 	private int readRating() {

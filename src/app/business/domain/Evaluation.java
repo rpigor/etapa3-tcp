@@ -40,4 +40,9 @@ public class Evaluation {
 		return status.equals(Status.PENDING);
 	}
 
+	public void rate(int rating) {
+		this.rating = rating;
+		this.status = Status.COMPLETED;
+	}
+
 }

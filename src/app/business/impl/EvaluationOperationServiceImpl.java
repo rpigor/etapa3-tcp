@@ -21,7 +21,9 @@ public class EvaluationOperationServiceImpl implements EvaluationOperationServic
 
 	@Override
 	public Evaluation rate(Product product, Evaluator evaluator, int rating) {
-		return null;
+		Evaluation pendingEvaluation = evaluator.getPendingEvaluationForProduct(product);
+		pendingEvaluation.rate(rating);
+		return pendingEvaluation;
 	}
 	
 	@Override
