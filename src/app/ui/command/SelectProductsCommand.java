@@ -1,14 +1,17 @@
 package app.ui.command;
 
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import app.business.EvaluationOperationService;
 import app.business.domain.EvaluationGroup;
+import app.business.domain.Product;
 import app.ui.UIUtils;
 
 public class SelectProductsCommand implements Command {
 
-	private static final int THRESHOLD_RATING = 0;
+	private static final double THRESHOLD_RATING = 0;
 	
 	private final EvaluationOperationService evalOperationService;
 
@@ -16,13 +19,37 @@ public class SelectProductsCommand implements Command {
 		this.evalOperationService = evalOperationService;
 	}
 	
+	// TODO: sort acceptable- and unacceptableProductsMean by mean in decreasing order
 	public void execute() {
 		List<EvaluationGroup> evaluationGroups = evalOperationService.getAllEvaluationGroups();
 		
 		printEvaluationGroups(evaluationGroups);
 		
 		EvaluationGroup selectedGroup = selectEvaluationGroup();
+		
+		if (selectedGroup.isUnallowed()) {
+			System.out.println("Este grupo ainda não foi alocado.");
+			return;
+		} else if (selectedGroup.hasPendingEvaluationForGroup(selectedGroup)) {
+			System.out.println("Este grupo ainda possui avaliações pendentes.");
+			return;
+		}
+		
 		System.out.println("Grupo de avaliação selecionado: " + selectedGroup.getName());
+		
+		Entry<Map<Product, Double>, Map<Product, Double>> acceptableAndUnacceptableProductsMean =
+				evalOperationService.getAcceptableAndUnacceptableProductsMean(selectedGroup, THRESHOLD_RATING);
+		
+		Map<Product, Double> acceptableProductsMean = acceptableAndUnacceptableProductsMean.getKey();
+		Map<Product, Double> unacceptableProductsMean = acceptableAndUnacceptableProductsMean.getValue();		
+		
+		System.out.println("Lista de produtos aceitáveis do grupo " + selectedGroup.getName() + " (média das avaliações >= " + THRESHOLD_RATING + "): ");
+		printProductsAndMean(acceptableProductsMean);
+		
+		System.out.println();
+		
+		System.out.println("Lista de produtos não aceitáveis do grupo " + selectedGroup.getName() + " (média das avaliações < " + THRESHOLD_RATING + "): ");
+		printProductsAndMean(unacceptableProductsMean);
 	}
 
 	private void printEvaluationGroups(List<EvaluationGroup> evaluationGroups) {
@@ -43,6 +70,13 @@ public class SelectProductsCommand implements Command {
 		}
 		
 		return selectedGroup;
+	}
+	
+	private void printProductsAndMean(Map<Product, Double> productsMean) {
+		System.out.printf("%-30s %-30s %-30s\n", "Id", "Nome", "Média");
+		for (Entry<Product, Double> set : productsMean.entrySet()) {
+			System.out.printf("%-30s %-30s %-30f\n", set.getKey().getId(), set.getKey().getName(), set.getValue());
+		}
 	}
 	
 }

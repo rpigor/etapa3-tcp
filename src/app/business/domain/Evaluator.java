@@ -76,5 +76,15 @@ public class Evaluator {
 		
 		return null;
 	}
+	
+	public boolean hasPendingEvaluationForGroup(EvaluationGroup evaluationGroup) {
+		for (Evaluation evaluation : getEvaluations()) {
+			if (evaluation.isPending() && evaluation.getProduct().getEvaluationGroup().equals(evaluationGroup)) {
+				return true;
+			}
+		}
+		
+		return false;
+	}
 
 }

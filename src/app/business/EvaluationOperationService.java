@@ -1,6 +1,8 @@
 package app.business;
 
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import app.business.domain.Evaluation;
 import app.business.domain.EvaluationGroup;
@@ -12,6 +14,8 @@ public interface EvaluationOperationService {
 	public Evaluation rate(Product product, Evaluator evaluator, int rating);
 	
 	public void allow(EvaluationGroup selectedGroup, int evaluatorsPerProduct);
+	
+	public Entry<Map<Product, Double>, Map<Product, Double>> getAcceptableAndUnacceptableProductsMean(EvaluationGroup selectedGroup, double thresholdRating);
 	
 	public List<Product> getAllProducts();
 	

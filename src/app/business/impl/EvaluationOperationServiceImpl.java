@@ -1,8 +1,12 @@
 package app.business.impl;
 
+import java.util.AbstractMap;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import app.business.EvaluationOperationService;
 import app.business.domain.Evaluation;
@@ -53,6 +57,30 @@ public class EvaluationOperationServiceImpl implements EvaluationOperationServic
 		
 		System.out.println("Fim da alocação.");
 		selectedGroup.setAllowed();
+	}
+	
+	@Override
+	public Entry<Map<Product, Double>, Map<Product, Double>> getAcceptableAndUnacceptableProductsMean(EvaluationGroup selectedGroup, double thresholdRating) {	
+		Map<Product, Double> acceptableProductsMean = new HashMap<Product, Double>();
+		Map<Product, Double> unacceptableProductsMean = new HashMap<Product, Double>();
+		
+		Map<Product, List<Integer>> productsRatings = selectedGroup.getProductsRatings();
+		
+		for (Map.Entry<Product, List<Integer>> set : productsRatings.entrySet()) {
+			Product product = set.getKey();
+			List<Integer> ratings = set.getValue();
+			
+			double ratingsSum = ratings.stream().reduce((a,b) -> a + b).get();
+			double ratingsMean = ratingsSum / Double.valueOf(ratings.size());
+			
+			if (ratingsMean >= thresholdRating) {
+				acceptableProductsMean.put(product, ratingsMean);
+			} else {
+				unacceptableProductsMean.put(product, ratingsMean);
+			}
+		}
+		
+		return new AbstractMap.SimpleEntry<Map<Product, Double>, Map<Product, Double>>(acceptableProductsMean, unacceptableProductsMean);
 	}
 	
 	@Override
