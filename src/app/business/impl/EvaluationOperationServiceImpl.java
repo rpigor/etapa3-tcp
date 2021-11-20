@@ -9,7 +9,6 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import app.business.EvaluationOperationService;
-import app.business.domain.Evaluation;
 import app.business.domain.EvaluationGroup;
 import app.business.domain.Evaluator;
 import app.business.domain.Product;
@@ -21,13 +20,6 @@ public class EvaluationOperationServiceImpl implements EvaluationOperationServic
 	
 	public EvaluationOperationServiceImpl(Database database) {
 		this.database = database;
-	}
-
-	@Override
-	public Evaluation rate(Product product, Evaluator evaluator, int rating) {
-		Evaluation pendingEvaluation = evaluator.getPendingEvaluationForProduct(product);
-		pendingEvaluation.rate(rating);
-		return pendingEvaluation;
 	}
 	
 	@Override

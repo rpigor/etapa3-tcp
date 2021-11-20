@@ -3,10 +3,10 @@ package app.ui.command;
 import java.util.LinkedList;
 import java.util.List;
 
-import app.business.EvaluationOperationService;
 import app.business.domain.Evaluation;
 import app.business.domain.Evaluator;
 import app.business.domain.Product;
+import app.data.Database;
 import app.ui.UIUtils;
 
 public class EvaluateProductsCommand implements Command {
@@ -14,15 +14,15 @@ public class EvaluateProductsCommand implements Command {
 	private static final int MIN_RATING = -3;
 	private static final int MAX_RATING = 3;
 	
-	private final EvaluationOperationService evalOperationService;
+	private final Database database;
 	
-	public EvaluateProductsCommand(EvaluationOperationService evalOperationService) {
-		this.evalOperationService = evalOperationService;
+	public EvaluateProductsCommand(Database database) {
+		this.database = database;
 	}
 	
 	@Override
 	public void execute() {
-		List<Product> products = evalOperationService.getAllProducts();
+		List<Product> products = new LinkedList<Product>(database.getAllProducts());
 		
 		if (products.isEmpty()) {
 			System.out.println("Não há produtos para avaliar.");
@@ -47,12 +47,14 @@ public class EvaluateProductsCommand implements Command {
 		System.out.println("Avaliador selecionado: " + selectedEvaluator.getName());
 		
 		int rating = readRating();
-		Evaluation evaluation = evalOperationService.rate(selectedProduct, selectedEvaluator, rating);
+		
+		Evaluation evaluation = selectedEvaluator.getPendingEvaluationForProduct(selectedProduct);
+		evaluation.rate(rating);
 		
 		System.out.println("Operação efetuada com sucesso.");
 		System.out.println("Avaliação: nota " + evaluation.getRating()
 				+ " para o produto " + selectedProduct.getName() + " (id " + selectedProduct.getId() + ")"
-				+ " pelo avaliador " + selectedEvaluator.getName() + " (id " + selectedEvaluator.getId() + ").");	
+				+ " pelo(a) avaliador(a) " + selectedEvaluator.getName() + " (id " + selectedEvaluator.getId() + ").");	
 	}
 	
 	private void printProducts(List<Product> products) {
@@ -69,7 +71,7 @@ public class EvaluateProductsCommand implements Command {
 		while (selectedProduct == null) {
 			System.out.print("Entre com o id de um produto: ");
 			productId = UIUtils.INSTANCE.readInteger();
-			selectedProduct = evalOperationService.getProductById(productId);
+			selectedProduct = database.getProductById(productId);
 		}
 		
 		return selectedProduct;
@@ -89,7 +91,7 @@ public class EvaluateProductsCommand implements Command {
 		while (selectedEvaluator == null || !evaluators.contains(selectedEvaluator)) {
 			System.out.print("Entre com o id de um avaliador: ");
 			evaluatorId = UIUtils.INSTANCE.readInteger();
-			selectedEvaluator = evalOperationService.getEvaluatorById(evaluatorId);
+			selectedEvaluator = database.getEvaluatorById(evaluatorId);
 		}
 		
 		return selectedEvaluator;

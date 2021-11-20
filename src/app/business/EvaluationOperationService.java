@@ -4,14 +4,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import app.business.domain.Evaluation;
 import app.business.domain.EvaluationGroup;
 import app.business.domain.Evaluator;
 import app.business.domain.Product;
 
 public interface EvaluationOperationService {
-	
-	public Evaluation rate(Product product, Evaluator evaluator, int rating);
 	
 	public void allow(EvaluationGroup selectedGroup, int evaluatorsPerProduct);
 	

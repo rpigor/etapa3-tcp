@@ -5,6 +5,7 @@ import java.util.Map;
 
 import app.ui.command.Command;
 import app.business.EvaluationOperationService;
+import app.data.Database;
 import app.ui.command.AllowProductsCommand;
 import app.ui.command.EvaluateProductsCommand;
 import app.ui.command.SelectProductsCommand;
@@ -15,11 +16,11 @@ public class TextInterface {
 	
 	private final Map<String, Command> commands;
 	
-	public TextInterface(EvaluationOperationService accountOperationService) {
+	public TextInterface(EvaluationOperationService accountOperationService, Database database) {
 		this.commands = new LinkedHashMap<>();
 		this.commands.put("A", new AllowProductsCommand(accountOperationService));
 		this.commands.put("S", new SelectProductsCommand(accountOperationService));
-		this.commands.put("R", new EvaluateProductsCommand(accountOperationService));
+		this.commands.put("R", new EvaluateProductsCommand(database));
 	}
 	
 	public void createAndShowUI() {

@@ -12,7 +12,7 @@ public class Application {
 		
 		EvaluationOperationService evalOperationService = new EvaluationOperationServiceImpl(database);
 		
-		TextInterface appInterface = new TextInterface(evalOperationService);
+		TextInterface appInterface = new TextInterface(evalOperationService, database);
 		
 		appInterface.createAndShowUI();
 	}
