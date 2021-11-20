@@ -19,7 +19,7 @@ public class TextInterface {
 	public TextInterface(EvaluationOperationService accountOperationService, Database database) {
 		this.commands = new LinkedHashMap<>();
 		this.commands.put("A", new AllowProductsCommand(accountOperationService));
-		this.commands.put("S", new SelectProductsCommand(accountOperationService));
+		this.commands.put("S", new SelectProductsCommand(database));
 		this.commands.put("R", new EvaluateProductsCommand(database));
 	}
 	

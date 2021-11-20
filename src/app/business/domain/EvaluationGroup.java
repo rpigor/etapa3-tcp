@@ -1,10 +1,12 @@
 package app.business.domain;
 
+import java.util.AbstractMap;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 public class EvaluationGroup {
 
@@ -47,8 +49,31 @@ public class EvaluationGroup {
 		
 		return false;
 	}
+	
+	public Entry<Map<Product, Double>, Map<Product, Double>> getAcceptableAndUnacceptableProductsMean(double thresholdRating) {
+		Map<Product, Double> acceptableProductsMean = new HashMap<Product, Double>();
+		Map<Product, Double> unacceptableProductsMean = new HashMap<Product, Double>();
+		
+		Map<Product, List<Integer>> productsRatings = getProductsRatings();
+		
+		for (Map.Entry<Product, List<Integer>> set : productsRatings.entrySet()) {
+			Product product = set.getKey();
+			List<Integer> ratings = set.getValue();
+			
+			double ratingsSum = ratings.stream().reduce((a,b) -> a + b).get();
+			double ratingsMean = ratingsSum / Double.valueOf(ratings.size());
+			
+			if (ratingsMean >= thresholdRating) {
+				acceptableProductsMean.put(product, ratingsMean);
+			} else {
+				unacceptableProductsMean.put(product, ratingsMean);
+			}
+		}
+		
+		return new AbstractMap.SimpleEntry<Map<Product, Double>, Map<Product, Double>>(acceptableProductsMean, unacceptableProductsMean);
+	}
 
-	public Map<Product, List<Integer>> getProductsRatings() {
+	private Map<Product, List<Integer>> getProductsRatings() {
 		Map<Product, List<Integer>> productsRatings = new HashMap<Product, List<Integer>>();
 		for (Evaluator evaluator : getMembers()) {
 			for (Evaluation evaluation : evaluator.getEvaluations()) {

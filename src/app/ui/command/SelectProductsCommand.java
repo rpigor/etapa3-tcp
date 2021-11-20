@@ -1,27 +1,28 @@
 package app.ui.command;
 
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import app.business.EvaluationOperationService;
 import app.business.domain.EvaluationGroup;
 import app.business.domain.Product;
+import app.data.Database;
 import app.ui.UIUtils;
 
 public class SelectProductsCommand implements Command {
 
 	private static final double THRESHOLD_RATING = 0;
 	
-	private final EvaluationOperationService evalOperationService;
+	private final Database database;
 
-	public SelectProductsCommand(EvaluationOperationService evalOperationService) {
-		this.evalOperationService = evalOperationService;
+	public SelectProductsCommand(Database database) {
+		this.database = database;
 	}
 	
 	// TODO: sort acceptable- and unacceptableProductsMean by mean in decreasing order
 	public void execute() {
-		List<EvaluationGroup> evaluationGroups = evalOperationService.getAllEvaluationGroups();
+		List<EvaluationGroup> evaluationGroups = new LinkedList<EvaluationGroup>(database.getAllEvaluationGroups());
 		
 		printEvaluationGroups(evaluationGroups);
 		
@@ -38,7 +39,7 @@ public class SelectProductsCommand implements Command {
 		System.out.println("Grupo de avaliação selecionado: " + selectedGroup.getName());
 		
 		Entry<Map<Product, Double>, Map<Product, Double>> acceptableAndUnacceptableProductsMean =
-				evalOperationService.getAcceptableAndUnacceptableProductsMean(selectedGroup, THRESHOLD_RATING);
+				selectedGroup.getAcceptableAndUnacceptableProductsMean(THRESHOLD_RATING);
 		
 		Map<Product, Double> acceptableProductsMean = acceptableAndUnacceptableProductsMean.getKey();
 		Map<Product, Double> unacceptableProductsMean = acceptableAndUnacceptableProductsMean.getValue();		
@@ -66,7 +67,7 @@ public class SelectProductsCommand implements Command {
 		while (selectedGroup == null) {
 			System.out.print("Entre com o nome do grupo de avaliação: ");
 			groupName = UIUtils.INSTANCE.readString();
-			selectedGroup = evalOperationService.getEvaluationGroupByName(groupName);
+			selectedGroup = database.getEvaluationGroupByName(groupName);
 		}
 		
 		return selectedGroup;
