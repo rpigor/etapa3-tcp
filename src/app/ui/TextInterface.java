@@ -4,7 +4,6 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 import app.ui.command.Command;
-import app.business.EvaluationOperationService;
 import app.data.Database;
 import app.ui.command.AllowProductsCommand;
 import app.ui.command.EvaluateProductsCommand;
@@ -16,9 +15,9 @@ public class TextInterface {
 	
 	private final Map<String, Command> commands;
 	
-	public TextInterface(EvaluationOperationService accountOperationService, Database database) {
+	public TextInterface(Database database) {
 		this.commands = new LinkedHashMap<>();
-		this.commands.put("A", new AllowProductsCommand(accountOperationService));
+		this.commands.put("A", new AllowProductsCommand(database));
 		this.commands.put("S", new SelectProductsCommand(database));
 		this.commands.put("R", new EvaluateProductsCommand(database));
 	}

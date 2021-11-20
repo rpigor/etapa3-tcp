@@ -1,6 +1,14 @@
 package app.ui.command;
 
-public interface Command {
+import app.data.Database;
+
+public abstract class Command {
+	
+	protected final Database database;
+	
+	public Command(Database database) {
+		this.database = database;
+	}
 	
 	public abstract void execute();
 

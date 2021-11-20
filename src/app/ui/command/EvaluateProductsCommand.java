@@ -9,15 +9,13 @@ import app.business.domain.Product;
 import app.data.Database;
 import app.ui.UIUtils;
 
-public class EvaluateProductsCommand implements Command {
-
+public class EvaluateProductsCommand extends Command {
+	
 	private static final int MIN_RATING = -3;
 	private static final int MAX_RATING = 3;
 	
-	private final Database database;
-	
 	public EvaluateProductsCommand(Database database) {
-		this.database = database;
+		super(database);
 	}
 	
 	@Override

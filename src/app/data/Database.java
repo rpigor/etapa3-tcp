@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 
 import app.business.domain.Category;
@@ -54,6 +55,27 @@ public class Database {
 		return this.evaluators.get(evaluatorId);
 	}
 	
+	public List<EvaluationGroup> getPendingEvaluationGroups() {
+		List<EvaluationGroup> pendingGroups = new LinkedList<EvaluationGroup>();
+		for (EvaluationGroup evaluationGroup : getAllEvaluationGroups()) {
+			if (evaluationGroup.isUnallowed()) {
+				pendingGroups.add(evaluationGroup);
+			}
+		}
+		
+		return pendingGroups;
+	}
+	
+	public List<Product> getProductsByGroup(EvaluationGroup selectedGroup) {
+		List<Product> groupProducts = new LinkedList<Product>();
+		for (Product product : getAllProducts()) {
+			if (product.getEvaluationGroup().equals(selectedGroup)) {
+				groupProducts.add(product);
+			}
+		}
+		
+		return groupProducts;
+	}
 	
 	private void initData() {
 		// evaluators

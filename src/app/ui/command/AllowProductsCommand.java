@@ -2,20 +2,18 @@ package app.ui.command;
 
 import java.util.List;
 
-import app.business.EvaluationOperationService;
 import app.business.domain.EvaluationGroup;
+import app.data.Database;
 import app.ui.UIUtils;
 
-public class AllowProductsCommand implements Command {
+public class AllowProductsCommand extends Command {
 	
-	private final EvaluationOperationService evalOperationService;
-	
-	public AllowProductsCommand(EvaluationOperationService evalOperationService) {
-		this.evalOperationService = evalOperationService;
+	public AllowProductsCommand(Database database) {
+		super(database);
 	}
-	
+
 	public void execute() {
-		List<EvaluationGroup> pendingGroups = evalOperationService.getPendingEvaluationGroups();
+		List<EvaluationGroup> pendingGroups = database.getPendingEvaluationGroups();
 		
 		if (pendingGroups.isEmpty()) {
 			System.out.println("Todos os grupos já foram alocados.");
@@ -30,7 +28,7 @@ public class AllowProductsCommand implements Command {
 		System.out.print("Entre com o número de avaliadores a serem alocados a cada produto: ");
 		int evaluatorsPerProduct = UIUtils.INSTANCE.readInteger(2, 5);
 		
-		evalOperationService.allow(selectedGroup, evaluatorsPerProduct);
+		selectedGroup.allowProducts(database.getProductsByGroup(selectedGroup), evaluatorsPerProduct);
 		
 		System.out.println("Operação efetuada com sucesso.");
 		
@@ -50,7 +48,7 @@ public class AllowProductsCommand implements Command {
 		while (selectedGroup == null || selectedGroup.isAllowed()) {
 			System.out.print("Entre com o nome do grupo de avaliação: ");
 			groupName = UIUtils.INSTANCE.readString();
-			selectedGroup = evalOperationService.getEvaluationGroupByName(groupName);
+			selectedGroup = database.getEvaluationGroupByName(groupName);
 		}
 		
 		return selectedGroup;

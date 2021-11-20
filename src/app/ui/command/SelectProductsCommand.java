@@ -10,14 +10,12 @@ import app.business.domain.Product;
 import app.data.Database;
 import app.ui.UIUtils;
 
-public class SelectProductsCommand implements Command {
+public class SelectProductsCommand extends Command {
 
 	private static final double THRESHOLD_RATING = 0;
 	
-	private final Database database;
-
 	public SelectProductsCommand(Database database) {
-		this.database = database;
+		super(database);
 	}
 	
 	// TODO: sort acceptable- and unacceptableProductsMean by mean in decreasing order

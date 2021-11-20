@@ -2,6 +2,7 @@ package app.business.domain;
 
 import java.util.AbstractMap;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -40,6 +41,10 @@ public class EvaluationGroup {
 		status = Status.COMPLETED;
 	}
 	
+	public void setUnallowed() {
+		status = Status.PENDING;
+	}
+	
 	public boolean hasPendingEvaluationForGroup(EvaluationGroup evaluationGroup) {
 		for (Evaluator evaluator : getMembers()) {
 			if (evaluator.hasPendingEvaluationForGroup(evaluationGroup)) {
@@ -48,6 +53,33 @@ public class EvaluationGroup {
 		}
 		
 		return false;
+	}
+	
+	public void allowProducts(List<Product> products, int evaluatorsPerProduct) {
+		List<Product> sortedProducts = new LinkedList<Product>(products);
+		Collections.sort(sortedProducts, (o1, o2) -> o1.getId() - o2.getId());
+		
+		System.out.println("Iniciando alocação.");
+		for (Product product : sortedProducts) {
+			List<Evaluator> pendingEvaluators = new LinkedList<Evaluator>(getMembers());
+			for (int i = 0; i < evaluatorsPerProduct; i++) {
+				List<Evaluator> candidateEvaluators = getCandidateEvaluators(pendingEvaluators, product);
+				
+				if (!candidateEvaluators.isEmpty()) {
+					sortEvaluatorsByAllowedProducts(candidateEvaluators, this);
+					
+					Evaluator selectedEvaluator = candidateEvaluators.get(0);
+					selectedEvaluator.allowProduct(product);
+					System.out.println("Produto de id " + product.getId()
+							+ " alocado ao avaliador de id " + selectedEvaluator.getId() + ".");
+					
+					pendingEvaluators.remove(selectedEvaluator);
+				}
+			}
+		}
+		
+		System.out.println("Fim da alocação.");
+		setAllowed();
 	}
 	
 	public Entry<Map<Product, Double>, Map<Product, Double>> getAcceptableAndUnacceptableProductsMean(double thresholdRating) {
@@ -88,6 +120,21 @@ public class EvaluationGroup {
 		}
 		
 		return productsRatings;
+	}
+	
+	private List<Evaluator> getCandidateEvaluators(List<Evaluator> evaluators, Product product) {
+		List<Evaluator> candidateEvaluators = new LinkedList<Evaluator>();
+		for (Evaluator evaluator : evaluators) {
+			if (evaluator.isProductCandidate(product)) {
+				candidateEvaluators.add(evaluator);
+			}
+		}
+		
+		return candidateEvaluators;
+	}
+	
+	private void sortEvaluatorsByAllowedProducts(List<Evaluator> evaluators, EvaluationGroup group) {
+		Collections.sort(evaluators, (o1, o2) -> o1.countAllowedProductsByGroup(group) - o2.countAllowedProductsByGroup(group));
 	}
 
 }
