@@ -1,5 +1,8 @@
 package app.business.domain;
 
+import java.util.LinkedList;
+import java.util.List;
+
 public class Product {
 
 	private int id;
@@ -35,6 +38,20 @@ public class Product {
 	
 	public Category getCategory() {
 		return category;
+	}
+	
+	public List<Evaluator> getAllowedEvaluators() {
+		List<Evaluator> allowedEvaluators = new LinkedList<Evaluator>();
+		for (Evaluator evaluator : getEvaluationGroup().getMembers()) {
+			for (Evaluation evaluation : evaluator.getEvaluations()) {
+				if (evaluation.getProduct().equals(this) && evaluation.isPending()) {
+					allowedEvaluators.add(evaluator);
+					break;
+				}
+			}
+		}
+		
+		return allowedEvaluators;
 	}
 
 }

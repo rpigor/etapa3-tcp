@@ -32,7 +32,7 @@ public class EvaluateProductsCommand extends Command {
 		Product selectedProduct = selectProduct();
 		System.out.println("Produto selecionado: " + selectedProduct.getName());
 		
-		List<Evaluator> allowedEvaluators = getAllowedEvaluatorsForProduct(selectedProduct);
+		List<Evaluator> allowedEvaluators = selectedProduct.getAllowedEvaluators();
 		
 		if (allowedEvaluators.isEmpty()) {
 			System.out.println("Não há avaliadores alocados para este produto.");
@@ -93,20 +93,6 @@ public class EvaluateProductsCommand extends Command {
 		}
 		
 		return selectedEvaluator;
-	}
-	
-	private List<Evaluator> getAllowedEvaluatorsForProduct(Product product) {
-		List<Evaluator> allowedEvaluators = new LinkedList<Evaluator>();
-		for (Evaluator evaluator : product.getEvaluationGroup().getMembers()) {
-			for (Evaluation evaluation : evaluator.getEvaluations()) {
-				if (evaluation.getProduct().equals(product) && evaluation.isPending()) {
-					allowedEvaluators.add(evaluator);
-					break;
-				}
-			}
-		}
-		
-		return allowedEvaluators;
 	}
 	
 	private int readRating() {
