@@ -111,6 +111,9 @@ public class EvaluationGroup {
 			for (Evaluation evaluation : evaluator.getEvaluations()) {
 				Product product = evaluation.getProduct();
 				
+				if (!product.getEvaluationGroup().equals(this))
+					continue;
+				
 				if (productsRatings.containsKey(product)) {
 					productsRatings.get(product).add(evaluation.getRating());
 				} else {
