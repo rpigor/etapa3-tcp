@@ -138,43 +138,43 @@ public class Database {
 		save(p1);
 		
 		Product p2 = new Product(2, "Avon CC Cream ", evaluators.get(6),
-				evaluationGroups.get("SPF B"), Category.DD_CREAM);
+				evaluationGroups.get("SPF B"), Category.CC_CREAM);
 		save(p2);
 		
 		Product p3 = new Product(3, "Revolution Powder Sunscreeen", evaluators.get(7),
-				evaluationGroups.get("SPF B"), Category.DD_CREAM);
+				evaluationGroups.get("SPF B"), Category.POWDER_SUNSCREEN);
 		save(p3);
 		
 		Product p4 = new Product(4, "Maybelline BB Cream", evaluators.get(8),
-				evaluationGroups.get("SPF B"), Category.DD_CREAM);
+				evaluationGroups.get("SPF B"), Category.BB_CREAM);
 		save(p4);
 		
 		Product p5 = new Product(5, "Revlon Foundation+SPF20 ", evaluators.get(9),
-				evaluationGroups.get("SPF B"), Category.DD_CREAM);
+				evaluationGroups.get("SPF B"), Category.FOUNDATION_SPF);
 		save(p5);
 		
 		Product p6 = new Product(6, "Nivea Matte Face SPF", evaluators.get(10),
-				evaluationGroups.get("SPF B"), Category.DD_CREAM);
+				evaluationGroups.get("SPF B"), Category.OIL_FREE_MATTE_SPF);
 		save(p6);
 		
 		Product p7 = new Product(7, "La Roche CC Cream", evaluators.get(6),
-				evaluationGroups.get("SPF A"), Category.DD_CREAM);
+				evaluationGroups.get("SPF A"), Category.CC_CREAM);
 		save(p7);
 		
 		Product p8 = new Product(8, "Yves Rocher Powder+SPF15", evaluators.get(7),
-				evaluationGroups.get("SPF A"), Category.DD_CREAM);
+				evaluationGroups.get("SPF A"), Category.POWDER_SUNSCREEN);
 		save(p8);
 		
 		Product p9 = new Product(9, "Nivea BB Cream", evaluators.get(8),
-				evaluationGroups.get("SPF A"), Category.DD_CREAM);
+				evaluationGroups.get("SPF A"), Category.BB_CREAM);
 		save(p9);
 		
 		Product p10 = new Product(10, "Base O Boticário SPF20", evaluators.get(9),
-				evaluationGroups.get("SPF A"), Category.DD_CREAM);
+				evaluationGroups.get("SPF A"), Category.FOUNDATION_SPF);
 		save(p10);
 		
 		Product p11 = new Product(11, "Natura SPF20 Rosto Matte", evaluators.get(10),
-				evaluationGroups.get("SPF A"), Category.DD_CREAM);
+				evaluationGroups.get("SPF A"), Category.OIL_FREE_MATTE_SPF);
 		save(p11);
 		
 		// evaluations
