@@ -56,25 +56,32 @@ public class EvaluationGroup {
 	}
 	
 	public void allowProducts(List<Product> products, int evaluatorsPerProduct) {
-		List<Product> sortedProducts = new LinkedList<Product>(products);
-		Collections.sort(sortedProducts, (o1, o2) -> o1.getId() - o2.getId());
-		
 		System.out.println("Iniciando alocação.");
-		for (Product product : sortedProducts) {
-			List<Evaluator> pendingEvaluators = new LinkedList<Evaluator>(getMembers());
-			for (int i = 0; i < evaluatorsPerProduct; i++) {
-				List<Evaluator> candidateEvaluators = getCandidateEvaluators(pendingEvaluators, product);
+		for (int i = 0; i < evaluatorsPerProduct; i++) {
+			List<Product> sortedProducts = new LinkedList<Product>(products);
+			Collections.sort(sortedProducts, (o1, o2) -> o1.getId() - o2.getId());
+			
+			while (!sortedProducts.isEmpty()) {
+				Product product = sortedProducts.get(0);
+				List<Evaluator> candidateEvaluators = getCandidateEvaluatorsForProduct(getMembers(), product);
+				sortEvaluatorsByAllowedProducts(candidateEvaluators, this);
 				
-				if (!candidateEvaluators.isEmpty()) {
-					sortEvaluatorsByAllowedProducts(candidateEvaluators, this);
-					
-					Evaluator selectedEvaluator = candidateEvaluators.get(0);
-					selectedEvaluator.allowProduct(product);
-					System.out.println("Produto de id " + product.getId()
-							+ " alocado ao avaliador de id " + selectedEvaluator.getId() + ".");
-					
-					pendingEvaluators.remove(selectedEvaluator);
+				int j = 0;
+				Evaluation evaluation = null;
+				while (evaluation == null && j < candidateEvaluators.size()) {
+					Evaluator selectedEvaluator = candidateEvaluators.get(j);
+					evaluation = selectedEvaluator.allowProduct(product); // returns null if this product was already allowed to this evaluator
+					j++;
 				}
+				
+				if (evaluation != null) {
+					System.out.println("Produto de id " + product.getId()
+							+ " alocado ao avaliador de id " + evaluation.getEvaluator().getId() + ".");
+				} else {
+					System.out.println("Produto de id " + product.getId() + " esgotou todos avaliadores disponíveis para alocação.");
+				}
+				
+				sortedProducts.remove(product);
 			}
 		}
 		
@@ -125,7 +132,7 @@ public class EvaluationGroup {
 		return productsRatings;
 	}
 	
-	private List<Evaluator> getCandidateEvaluators(List<Evaluator> evaluators, Product product) {
+	private List<Evaluator> getCandidateEvaluatorsForProduct(List<Evaluator> evaluators, Product product) {
 		List<Evaluator> candidateEvaluators = new LinkedList<Evaluator>();
 		for (Evaluator evaluator : evaluators) {
 			if (evaluator.isProductCandidate(product)) {

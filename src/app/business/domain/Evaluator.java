@@ -41,8 +41,12 @@ public class Evaluator {
 	}
 
 	public Evaluation allowProduct(Product product) {
+		if (getPendingEvaluationForProduct(product) != null)
+			return null;
+		
 		Evaluation pendingEvaluation = new Evaluation(this, product);
 		evaluations.add(pendingEvaluation);
+		
 		return pendingEvaluation;
 	}
 	
