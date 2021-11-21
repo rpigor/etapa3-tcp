@@ -1,5 +1,8 @@
 package app.ui.command;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -18,7 +21,6 @@ public class SelectProductsCommand extends Command {
 		super(database);
 	}
 	
-	// TODO: sort acceptable- and unacceptableProductsMean by mean in decreasing order
 	public void execute() {
 		List<EvaluationGroup> evaluationGroups = new LinkedList<EvaluationGroup>(database.getAllEvaluationGroups());
 		
@@ -39,8 +41,8 @@ public class SelectProductsCommand extends Command {
 		Entry<Map<Product, Double>, Map<Product, Double>> acceptableAndUnacceptableProductsMean =
 				selectedGroup.getAcceptableAndUnacceptableProductsMean(THRESHOLD_RATING);
 		
-		Map<Product, Double> acceptableProductsMean = acceptableAndUnacceptableProductsMean.getKey();
-		Map<Product, Double> unacceptableProductsMean = acceptableAndUnacceptableProductsMean.getValue();		
+		Map<Product, Double> acceptableProductsMean = sortDescendingProductsMean(acceptableAndUnacceptableProductsMean.getKey());
+		Map<Product, Double> unacceptableProductsMean = sortAscendingProductsMean(acceptableAndUnacceptableProductsMean.getValue());
 		
 		System.out.println("Lista de produtos aceitáveis do grupo " + selectedGroup.getName() + " (média das avaliações >= " + THRESHOLD_RATING + "): ");
 		printProductsAndMean(acceptableProductsMean);
@@ -76,6 +78,31 @@ public class SelectProductsCommand extends Command {
 		for (Entry<Product, Double> set : productsMean.entrySet()) {
 			System.out.printf("%-30s %-30s %-30f\n", set.getKey().getId(), set.getKey().getName(), set.getValue());
 		}
+	}
+	
+	private Map<Product, Double> sortAscendingProductsMean(Map<Product, Double> productsMean) {
+		return sortProductsMean(productsMean, false);
+	}
+	
+	private Map<Product, Double> sortDescendingProductsMean(Map<Product, Double> productsMean) {
+		return sortProductsMean(productsMean, true);
+	}
+	
+	private Map<Product, Double> sortProductsMean(Map<Product, Double> productsMean, boolean reversedOrder) {
+		List<Entry<Product, Double>> entryList = new ArrayList<>(productsMean.entrySet());
+		
+		if (reversedOrder) {
+			entryList.sort(Collections.reverseOrder(Entry.comparingByValue()));
+		} else {
+			entryList.sort(Entry.comparingByValue());
+		}
+
+        Map<Product, Double> sortedProductsMean = new LinkedHashMap<>();
+        for (Entry<Product, Double> entry : entryList) {
+        	sortedProductsMean.put(entry.getKey(), entry.getValue());
+        }
+
+        return sortedProductsMean;
 	}
 	
 }
