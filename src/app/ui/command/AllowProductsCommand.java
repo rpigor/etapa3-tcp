@@ -12,6 +12,7 @@ public class AllowProductsCommand extends Command {
 		super(database);
 	}
 
+	@Override
 	public void execute() {
 		List<EvaluationGroup> pendingGroups = database.getPendingEvaluationGroups();
 		
@@ -31,7 +32,11 @@ public class AllowProductsCommand extends Command {
 		selectedGroup.allowProducts(database.getProductsByGroup(selectedGroup), evaluatorsPerProduct);
 		
 		System.out.println("Operação efetuada com sucesso.");
-		
+	}
+	
+	@Override
+	public String toString() {
+		return "Alocar Produtos";
 	}
 
 	private void printEvaluationGroups(List<EvaluationGroup> evaluationGroups) {

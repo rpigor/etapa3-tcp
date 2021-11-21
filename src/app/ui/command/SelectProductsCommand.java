@@ -21,6 +21,7 @@ public class SelectProductsCommand extends Command {
 		super(database);
 	}
 	
+	@Override
 	public void execute() {
 		List<EvaluationGroup> evaluationGroups = new LinkedList<EvaluationGroup>(database.getAllEvaluationGroups());
 		
@@ -51,6 +52,11 @@ public class SelectProductsCommand extends Command {
 		
 		System.out.println("Lista de produtos não aceitáveis do grupo " + selectedGroup.getName() + " (média das avaliações < " + THRESHOLD_RATING + "): ");
 		printProductsAndMean(unacceptableProductsMean);
+	}
+	
+	@Override
+	public String toString() {
+		return "Selecionar Produtos";
 	}
 
 	private void printEvaluationGroups(List<EvaluationGroup> evaluationGroups) {

@@ -55,6 +55,11 @@ public class EvaluateProductsCommand extends Command {
 				+ " pelo(a) avaliador(a) " + selectedEvaluator.getName() + " (id " + selectedEvaluator.getId() + ").");	
 	}
 	
+	@Override
+	public String toString() {
+		return "Avaliar Produto";
+	}
+	
 	private void printProducts(List<Product> products) {
 		System.out.println("Produtos:");
 		for (Product product : products) {

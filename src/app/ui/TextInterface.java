@@ -47,7 +47,7 @@ public class TextInterface {
 			Command command = commands.get(key);
 			sb.append(key)
 					.append(" - ")
-					.append(command.getClass().getSimpleName())
+					.append(command.toString())
 					.append("\n");
 		}
 		sb.append("Escolha uma opção: ");
