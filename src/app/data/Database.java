@@ -180,6 +180,8 @@ public class Database {
 		// evaluations
 		e8.allowProduct(p1).rate(2);
 		e10.allowProduct(p1);
+		eg3.setAllowed();
+		
 		e7.allowProduct(p2).rate(2);
 		e2.allowProduct(p2).rate(3);
 		e4.allowProduct(p3).rate(-1);
@@ -190,6 +192,7 @@ public class Database {
 		e5.allowProduct(p5).rate(-3);
 		e3.allowProduct(p6).rate(-1);
 		e6.allowProduct(p6).rate(0);
+		eg2.setAllowed();
 	}
 	
 	private void save(Evaluator evaluator) {
