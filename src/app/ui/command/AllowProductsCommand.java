@@ -8,6 +8,9 @@ import app.ui.UIUtils;
 
 public class AllowProductsCommand extends Command {
 	
+	private static final int MIN_PRODUCT_EVALUATORS = 2;
+	private static final int MAX_PRODUCT_EVALUATORS = 5;
+	
 	public AllowProductsCommand(Database database) {
 		super(database);
 	}
@@ -27,7 +30,7 @@ public class AllowProductsCommand extends Command {
 		System.out.println("Grupo de avaliação selecionado: " + selectedGroup.getName());
 		
 		System.out.print("Entre com o número de avaliadores a serem alocados a cada produto: ");
-		int evaluatorsPerProduct = UIUtils.INSTANCE.readInteger(2, 5);
+		int evaluatorsPerProduct = UIUtils.INSTANCE.readInteger(MIN_PRODUCT_EVALUATORS, MAX_PRODUCT_EVALUATORS);
 		
 		selectedGroup.allowProducts(database.getProductsByGroup(selectedGroup), evaluatorsPerProduct);
 		
