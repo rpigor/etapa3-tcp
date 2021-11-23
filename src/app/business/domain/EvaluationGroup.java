@@ -45,9 +45,9 @@ public class EvaluationGroup {
 		status = Status.PENDING;
 	}
 	
-	public boolean hasPendingEvaluationForGroup(EvaluationGroup evaluationGroup) {
+	public boolean hasPendingEvaluation() {
 		for (Evaluator evaluator : getMembers()) {
-			if (evaluator.hasPendingEvaluationForGroup(evaluationGroup)) {
+			if (evaluator.hasPendingEvaluationForGroup(this)) {
 				return true;
 			}
 		}

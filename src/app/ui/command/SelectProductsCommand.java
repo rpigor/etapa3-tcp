@@ -32,7 +32,7 @@ public class SelectProductsCommand extends Command {
 		if (selectedGroup.isUnallowed()) {
 			System.out.println("Este grupo ainda não foi alocado.");
 			return;
-		} else if (selectedGroup.hasPendingEvaluationForGroup(selectedGroup)) {
+		} else if (selectedGroup.hasPendingEvaluation()) {
 			System.out.println("Este grupo ainda possui avaliações pendentes.");
 			return;
 		}
