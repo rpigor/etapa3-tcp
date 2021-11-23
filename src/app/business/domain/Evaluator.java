@@ -63,7 +63,7 @@ public class Evaluator {
 		
 		int n = 0;
 		for (Evaluation evaluation : evaluations) {
-			if (evaluation.getProduct().getEvaluationGroup().equals(group)) {
+			if (evaluation.getProduct().getEvaluationGroup().equals(group) && evaluation.isPending()) {
 				n++;
 			}
 		}
