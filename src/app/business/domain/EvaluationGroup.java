@@ -63,7 +63,7 @@ public class EvaluationGroup {
 			
 			while (!sortedProducts.isEmpty()) {
 				Product product = sortedProducts.get(0);
-				List<Evaluator> candidateEvaluators = getCandidateEvaluatorsForProduct(getMembers(), product);
+				List<Evaluator> candidateEvaluators = getCandidateEvaluatorsForProduct(product);
 				sortEvaluatorsByAllowedProducts(candidateEvaluators, this);
 				
 				int j = 0;
@@ -132,9 +132,9 @@ public class EvaluationGroup {
 		return productsRatings;
 	}
 	
-	private List<Evaluator> getCandidateEvaluatorsForProduct(List<Evaluator> evaluators, Product product) {
+	private List<Evaluator> getCandidateEvaluatorsForProduct(Product product) {
 		List<Evaluator> candidateEvaluators = new LinkedList<Evaluator>();
-		for (Evaluator evaluator : evaluators) {
+		for (Evaluator evaluator : getMembers()) {
 			if (evaluator.isProductCandidate(product)) {
 				candidateEvaluators.add(evaluator);
 			}
