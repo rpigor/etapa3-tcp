@@ -116,6 +116,10 @@ public class EvaluationGroup {
 		Map<Product, List<Integer>> productsRatings = new HashMap<Product, List<Integer>>();
 		for (Evaluator evaluator : getMembers()) {
 			for (Evaluation evaluation : evaluator.getEvaluations()) {
+				if (evaluation.isPending()) {
+					continue;
+				}
+				
 				Product product = evaluation.getProduct();
 				
 				if (!product.getEvaluationGroup().equals(this))
